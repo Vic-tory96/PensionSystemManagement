@@ -93,7 +93,7 @@ namespace PensionSystem.Presentation.Controllers.v1
                     data: "Invalid credentials."
                 );
 
-                return Ok(errorResponse);
+                return Unauthorized(errorResponse);
             }
 
             var token = GenerateJwtToken(member);
