@@ -1,8 +1,8 @@
-# ?? Pension System Management
+ Pension System Management
 
 A robust Pension System Management application designed with Clean Architecture to manage contributions, benefits, transactions, and scheduled jobs efficiently.
 
-## ?? Project Setup Instructions
+ Project Setup Instructions
 
 1. **Clone the repository:**
    ```bash
@@ -30,7 +30,7 @@ A robust Pension System Management application designed with Clean Architecture 
 
    API DOCUMENTATION
 
-1. ?? Setting up Swagger in your Project
+1.  Setting up Swagger in your Project
 Install the Swagger NuGet package:
 
 Open your Package Manager Console in Visual Studio and run this command to install the Swagger package:
@@ -108,11 +108,11 @@ public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 
 3. Run the Application: After setting up Swagger, run the application.
 
-?? Accessing Swagger UI
+ Accessing Swagger UI
  - Once you run the application, you should be able to access the Swagger documentation at:
    http://localhost:5000/swagger
 
-?? What’s Next?
+ What’s Next?
 Test your API Endpoints: After setting up Swagger, test your API through the Swagger UI. You can directly send requests and see responses right there.
 
 /// <summary>
@@ -125,7 +125,7 @@ public IActionResult GetMembers()
     // Your code here
 }
 
-## ??? Architecture Overview
+ Architecture Overview
 
 The **Pension System Management** application follows **Clean Architecture**, which ensures separation of concerns, maintainability, and scalability. The application is divided into the following layers:
 
