@@ -18,15 +18,12 @@ using PensionSystem.Infrastructure.Helpers;
 using PensionSystem.Infrastructure.Services;
 using PensionSystem.Infrastructure.Validation;
 using PensionSystem.Presentation.Configurations;
+using PensionSystem.Presentation.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Register JwtSettings in DI container
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
-var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>(); //come bk
-Console.WriteLine($"Issuer: {jwtSettings.Issuer}, Audience: {jwtSettings.Audience}, Key: {jwtSettings.Key}"); //come bk
 
 // Add Hangfire services with custom configuration
 builder.Services.AddHangfire(config => config
@@ -70,6 +67,8 @@ builder.Services.AddScoped<IValidator<Contribution>, ContributionValidator>();
 
 builder.Services.AddScoped<IMemberService, MemberService>();
 builder.Services.AddScoped<IContributionServices, ContributionService>();
+builder.Services.AddScoped<AuthServices>();
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
 builder.Services.AddHangfireServer(); // Adds Hangfire server
 // Register your services
@@ -81,24 +80,22 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    
 })
     // Add JWT authentication
     .AddJwtBearer(options =>
     {
-        options.SaveToken = true;
-        options.RequireHttpsMetadata = false;
-        // var jwtSettings = builder.Services.BuildServiceProvider().GetRequiredService<IOptions<JwtSettings>>().Value;
+
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidateAudience = true,
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,  // Optionally validate token expiration
             ClockSkew = TimeSpan.Zero, // Optional: eliminate clock skew
-            ValidIssuer =jwtSettings.Issuer,//builder.Configuration["Jwt:Issuer"],
-            ValidAudience = jwtSettings.Audience,//builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Key))
+            ValidIssuer =builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
         };
     });
 

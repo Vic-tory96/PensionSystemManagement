@@ -28,7 +28,7 @@ namespace PensionSystem.Presentation.Configurations
                         ClockSkew = TimeSpan.Zero, // Optional: eliminate clock skew
                         ValidIssuer = _jwtSettings.Issuer,
                         ValidAudience = _jwtSettings.Audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Key))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Secret))
                      
                     };
                 });
